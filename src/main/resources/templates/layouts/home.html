@@ -1,5 +1,6 @@
-<!DOCTYPE html>
-<html
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
     xmlns:th="http://www.thymeleaf.org"
     xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
@@ -11,11 +12,11 @@
     <link rel="icon" th:href="@{images/appbricks-logo.png}" href="../../static/images/appbricks-logo.png" sizes="16x16" type="image/png"/>
 
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -66,21 +67,24 @@
             Phasellus et placerat elit.
         </p>
     </div>
-    <!-- <div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'footer-admin' : 'footer'"> -->
-    <div th:replace="fragments/footer :: footer" style="color:white;margin-top:60pt;">
-        &copy; 2015 @ppBricks (layout)
-    </div>
-    <!-- Home page dialogs -->
-    <div th:replace="fragments/signin :: signin_ext"/>
-    <!--<div th:replace="fragments/signin :: signup"/>-->
 </div>
+
+<div class="footer">
+    <!--<div th:replace="fragments/footer :: ${#authentication.principal.isAdmin()} ? 'footer-admin' : 'footer'">-->
+    <div th:replace="fragments/footer :: footer">
+        <!--&copy; 2015 @ppBricks (layout)-->
+    </div>
+</div>
+
+<!-- Home page dialogs -->
+<div th:replace="fragments/signin :: signin"/>
 
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <!-- Bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 <!-- AngularJS -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://code.angularjs.org/2.0.0-beta.1/angular2.min.js"></script>
 
 </body>
 </html>

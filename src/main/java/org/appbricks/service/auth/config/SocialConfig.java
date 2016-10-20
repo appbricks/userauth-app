@@ -3,6 +3,7 @@ package org.appbricks.service.auth.config;
 import org.appbricks.repository.user.SocialConnectionRepository;
 import org.appbricks.service.auth.repository.UsersConnectionRepositoryImpl;
 import org.appbricks.service.auth.service.ConnectionSignUpService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Scope;
@@ -14,11 +15,15 @@ import org.springframework.social.config.annotation.ConnectionFactoryConfigurer;
 import org.springframework.social.config.annotation.EnableSocial;
 import org.springframework.social.config.annotation.SocialConfigurer;
 import org.springframework.social.connect.*;
+import org.springframework.social.connect.web.ConnectController;
 import org.springframework.social.facebook.connect.FacebookConnectionFactory;
 import org.springframework.social.google.api.Google;
 import org.springframework.social.google.api.impl.GoogleTemplate;
+import org.springframework.social.google.connect.GoogleConnectionFactory;
+import org.springframework.social.linkedin.connect.LinkedInConnectionFactory;
 import org.springframework.social.security.AuthenticationNameUserIdSource;
 import org.springframework.social.security.SocialAuthenticationServiceLocator;
+import org.springframework.social.twitter.connect.TwitterConnectionFactory;
 
 import javax.inject.Inject;
 
@@ -27,7 +32,7 @@ import javax.inject.Inject;
  */
 @Configuration
 @EnableSocial
-public class SocialContext
+public class SocialConfig
     implements SocialConfigurer {
 
     @Inject
@@ -39,26 +44,28 @@ public class SocialContext
     @Override
     public void addConnectionFactories(ConnectionFactoryConfigurer connectionFactoryConfigurer, Environment environment) {
 
-//        GoogleConnectionFactory gcf = new GoogleConnectionFactory(
-//            environment.getProperty("social.google.client.id"),
-//            environment.getProperty("social.google.client.secret") );
-//
-//        gcf.setScope(environment.getProperty("social.google.scope"));
-//        connectionFactoryConfigurer.addConnectionFactory(gcf);
-//
-//        LinkedInConnectionFactory lcf = new LinkedInConnectionFactory(
-//                environment.getProperty("social.linkedin.api.key"),
-//                environment.getProperty("social.linkedin.api.secret") );
-//
-//        lcf.setScope(environment.getProperty("social.linkedin.scope"));
-//        connectionFactoryConfigurer.addConnectionFactory(lcf);
-//
-        FacebookConnectionFactory fcf = new FacebookConnectionFactory(
-                environment.getProperty("social.facebook.app.id"),
-                environment.getProperty("social.facebook.app.secret") );
+        GoogleConnectionFactory gcf = new GoogleConnectionFactory(
+            environment.getProperty("social.google.clientId"),
+            environment.getProperty("social.google.clientSecret") );
+        gcf.setScope(environment.getProperty("social.google.scope"));
+        connectionFactoryConfigurer.addConnectionFactory(gcf);
 
+        LinkedInConnectionFactory lcf = new LinkedInConnectionFactory(
+            environment.getProperty("social.linkedin.clientId"),
+            environment.getProperty("social.linkedin.clientSecret") );
+        lcf.setScope(environment.getProperty("social.linkedin.scope"));
+        connectionFactoryConfigurer.addConnectionFactory(lcf);
+
+        FacebookConnectionFactory fcf = new FacebookConnectionFactory(
+            environment.getProperty("social.facebook.appId"),
+            environment.getProperty("social.facebook.appSecret") );
         fcf.setScope(environment.getProperty("social.facebook.scope"));
         connectionFactoryConfigurer.addConnectionFactory(fcf);
+
+        TwitterConnectionFactory tcf = new TwitterConnectionFactory(
+            environment.getProperty("social.twitter.apiKey"),
+            environment.getProperty("social.twitter.apiSecret") );
+        connectionFactoryConfigurer.addConnectionFactory(tcf);
     }
 
     @Override

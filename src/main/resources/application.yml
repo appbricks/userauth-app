@@ -1,9 +1,5 @@
 # Spring
 spring:
-  data:
-    mongodb:
-      host: localhost
-      port: 27017
   thymeleaf:
     cache: false
 
@@ -17,22 +13,24 @@ social:
   encryption:
     key: userf123
   google:
-    client.id: 375346124902-24mnek6o98vggco052j8087drfjllsd0.apps.googleusercontent.com
-    client.secret: WuDse5l0BjZtVz2tY80sOJvR
+    clientId: 164472200342-u2a5psllgvkdo00othujj6vudk5vaf3s.apps.googleusercontent.com
+    clientSecret: zY1npxzNFbUG6ZAmUn_RxFyV
     scope: openid profile email
   linkedin:
-    api.key: 75o2hmb1otpg58
-    api.secret: z6RDrCtQVTVrqkLy
-    oauth.token: 358da920-ce97-48af-b519-a73c0be13738
-    oauth.secret: fbcb445f-6598-4813-8b04-0f2f654e8e5b
+    clientId: 753vd5unm71z4p
+    clientSecret: R5L7GPLzgQxknHQr
     scope: r_basicprofile r_emailaddress
   facebook:
-    app.id: 832209976832382
-    app.secret: dc631980109855fc586457209fe1dc6c
-    scope: email
+    appId: 154382754934592
+    appSecret: 5a0e440c2410446f2de705341da4e07e
+    scope: public_profile email
   twitter:
-    api.key: TmN6d7nLbALvRHMm4h5NiZuV3
-    api.secret: I3ZfuybW3qk9GsJy7fT6gfQnZLaqPDK5GbGJwOd4IhOYRIftNa
+    apiKey: 0gO7T7SYmZRT6NKMiGQKTJbGz
+    apiSecret: TdVqXyvRY5usKtgXrO6imto9RRhCfNmFcW9Mg7gFbNqf2GIZSF
+
+#  twitter:
+#    api.key: TmN6d7nLbALvRHMm4h5NiZuV3
+#    api.secret: I3ZfuybW3qk9GsJy7fT6gfQnZLaqPDK5GbGJwOd4IhOYRIftNa
 
 # User Authorization
 user:

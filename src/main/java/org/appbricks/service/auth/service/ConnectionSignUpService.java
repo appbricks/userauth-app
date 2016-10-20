@@ -2,7 +2,11 @@ package org.appbricks.service.auth.service;
 
 import org.appbricks.model.person.Email;
 import org.appbricks.model.person.Person;
+import org.appbricks.model.user.Account;
+import org.appbricks.model.user.IndividualUser;
+import org.appbricks.model.user.LoggedInUser;
 import org.appbricks.model.user.User;
+import org.appbricks.repository.person.PersonRepository;
 import org.appbricks.repository.user.RoleRepository;
 import org.appbricks.repository.user.UserRepository;
 import org.slf4j.Logger;
@@ -31,6 +35,9 @@ public class ConnectionSignUpService
     private UserRepository userRepository;
 
     @Inject
+    private PersonRepository personRepository;
+
+    @Inject
     private RoleRepository roleRepository;
 
     @Value("${user.rbac.user.role}")
@@ -44,25 +51,53 @@ public class ConnectionSignUpService
         ConnectionData data = connection.createData();
         UserProfile profile = connection.fetchUserProfile();
 
-        User user = new User(profile.getUsername(), profile.getEmail());
-        
-        Person person = new Person();
-        person.setFamilyName(profile.getLastName());
-        person.setGivenName(profile.getFirstName());
-        person.addContact(new Email(profile.getEmail()));
-        
+        String name = profile.getName();
+        String lastName = profile.getLastName();
+        String firstName = profile.getFirstName();
+        String email = profile.getEmail();
 
-//        if (logger.isDebugEnabled()) {
-//
-//            logger.debug(
-//                "Created a new user '" + loggedInUser.getUserId() +
-//                "', for " + loggedInUser );
-//
-//            logger.debug(
-//                "connection data is from provider '" + data.getProviderId() +
-//                "', providerUserId is '" + data.getProviderUserId() );
-//        }
+        if (email == null) {
+            throw new ConnectionSignUpException("Email address not found in user profile from auth provider '%s'.", data.getProviderId());
+        }
 
-        return profile.getUsername();
+        User user = this.userRepository.findByLoginName(email);
+        if (user != null) {
+            return user.getLoginName();
+        }
+
+        Person owner = new Person();
+        if (profile.getLastName() == null && profile.getName() != null) {
+            owner.setFullName(name);
+        } else {
+            owner.setFamilyName(lastName);
+        }
+        owner.setGivenName(firstName);
+        owner.addContact(new Email(email), true);
+
+        IndividualUser newUser = new IndividualUser(email);
+        newUser.getAccount().addPrimaryOwner(owner);
+
+        try {
+            this.personRepository.save(owner);
+            this.userRepository.save(newUser);
+        } catch (Throwable t1) {
+            // Attempt to delete objects if added
+            try { this.personRepository.delete(owner); } catch (Throwable t2) {}
+            try { this.userRepository.delete(newUser); } catch (Throwable t2) {}
+            throw t1;
+        }
+
+        if (logger.isDebugEnabled()) {
+
+            logger.debug(
+                "Created a new user with login '" + newUser.getLoginName() +
+                "' with registration email " + newUser.getEmail() );
+
+            logger.debug(
+                "connection data is from provider '" + data.getProviderId() +
+                "', providerUserId is '" + data.getProviderUserId() );
+        }
+
+        return email;
     }
 }

@@ -18,6 +18,14 @@ apply plugin: "idea"
 group = 'org.appbricks'
 version =  "0.1.0-SNAPSHOT"
 
+ext {
+    springSocialGoogleVersion = '1.0.0.RELEASE'
+    springSocialLinkedInVersion = '1.0.0.RELEASE'
+    springSocialFacebookVersion = '2.0.3.RELEASE'
+    springSocialTwitterVersion = '1.1.2.RELEASE'
+    thymeleafExtrasSpringSecurityVersion = '2.1.1.RELEASE'
+}
+
 war {
     baseName = "ab-userauth-app"
 }
@@ -34,13 +42,14 @@ dependencies {
         ["org.springframework.boot:spring-boot-starter-thymeleaf"],
         ["org.springframework.boot:spring-boot-starter-security"],
         ["org.springframework.social:spring-social-security"],
-        ["org.springframework.social:spring-social-linkedin"],
-        ["org.springframework.social:spring-social-twitter"],
-        ["org.springframework.social:spring-social-facebook"],
-        ["org.springframework.social:spring-social-google:1.0.0.RC1"],
-        ["org.thymeleaf.extras:thymeleaf-extras-springsecurity3:2.1.1.RELEASE"],
+        ["org.springframework.social:spring-social-google:${springSocialGoogleVersion}"],
+        ["org.springframework.social:spring-social-linkedin:${springSocialLinkedInVersion}"],
+        ["org.springframework.social:spring-social-facebook:${springSocialFacebookVersion}"],
+        ["org.springframework.social:spring-social-twitter:${springSocialTwitterVersion}"],
+        ["org.thymeleaf.extras:thymeleaf-extras-springsecurity3:${thymeleafExtrasSpringSecurityVersion}"],
         ["javax.servlet:jstl:1.2"],
-        ["org.appbricks:ab-user-model:0.1.0-SNAPSHOT"]
+        ["org.appbricks:ab-model-user:0.1.0-SNAPSHOT"],
+        ["org.appbricks:ab-model-application:0.1.0-SNAPSHOT"]
     )
     compile('org.springframework:spring-orm:4.1.4.RELEASE') {
         exclude group: 'commons-logging', module: 'commons-logging'
@@ -99,9 +108,16 @@ test {
     ext.workingDirectory = "build/"
 }
 
-bootRun.dependsOn startMongo
+task startMongo(type:Exec) {
+    executable "${project.projectDir}/data/start_mongo.sh"
+}
+task stopMongo(type:Exec) {
+    executable "${project.projectDir}/data/stop_mongo.sh"
+}
+
 test.dependsOn startMongo
 test.finalizedBy stopMongo
+bootRun.dependsOn startMongo
 
 // https://github.com/stevesaliman/gradle-cobertura-plugin
 // http://ingorichter.blogspot.ch/2013/03/using-cobertura-with-gradle.html for list of options

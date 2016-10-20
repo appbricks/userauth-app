@@ -1,7 +1,7 @@
-<!DOCTYPE html>
-<html layout:decorator="layout"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
@@ -9,19 +9,12 @@
 
     <title>Sign In Dialog Fragments</title>
 
-    <!-- JQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-
     <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css"/>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"/>
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"/>
-
-    <!-- AngularJS -->
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -52,9 +45,6 @@
                     </div>
                     <div class="panel-body">
                         <button class="btn btn-info btn-block" data-toggle="modal" data-target="#signInDialog">
-                            Sign In
-                        </button>
-                        <button class="btn btn-info btn-block" data-toggle="modal" data-target="#signInExtendedDialog">
                             Sign In with Sign Up
                         </button>
                     </div>
@@ -80,47 +70,11 @@
     </style>
 </div>
 
-<!-- Sign In Dialog -->
+<!-- Sign In with Sign Up Dialog -->
 <div th:fragment="signin">
     <div class="modal fade" id="signInDialog" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
         <div class="modal-dialog">
-            <div class="modal-content col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2" style="background-color: #8b8b8b;">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                    <h4 class="modal-title text-center" id="signInLabel">Sign In</h4>
-                </div>
-                <div class="modal-body" style="margin-bottom:8pt;">
-                    <form role="form">
-                        <div class="form-group">
-                            <input type="text" name="name" id="name" class="form-control input-sm" placeholder="Login Name"/>
-                        </div>
-                        <div class="form-group">
-                            <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password"/>
-                        </div>
-                        <a type="button" class="btn btn-success btn-block"><i class="fa fa-sign-in"></i> Sign In</a>
-                    </form>
-                    <hr/>
-                    <p class="text-center">
-                        <i class="fa fa-long-arrow-right"></i> or sign in with <i class="fa fa-long-arrow-left"></i>
-                    </p>
-                    <a type="button" class="btn btn-block btn-social btn-google-plus"><i class="fa fa-google-plus"></i> Google</a>
-                    <a type="button" class="btn btn-block btn-social btn-linkedin"><i class="fa fa-linkedin"></i> LinkedIn</a>
-                    <a type="button" class="btn btn-block btn-social btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
-                    <a type="button" class="btn btn-block btn-social btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
-               </div>
-            </div>
-        </div>
-    </div>
-
-</div>
-
-<!-- Sign In with Sign Up Dialog -->
-<div th:fragment="signin_ext">
-    <div class="modal fade" id="signInExtendedDialog" tabindex="-1" role="dialog" aria-labelledby="signInLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2" style="background-color: #8b8b8b;">
+            <div class="modal-content col-xs-12 col-sm-8 col-md-8 col-sm-offset-2 col-md-offset-2">
                 <div class="modal-body">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -132,12 +86,12 @@
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist" style="opacity: 0.5">
                             <li role="presentation" class="active">
-                                <a href="#signin" aria-controls="signin" role="tab" data-toggle="tab">
+                                <a href="#signIn" aria-controls="signIn" role="tab" data-toggle="tab">
                                     <i class="fa fa-sign-in"></i> Sign In
                                 </a>
                             </li>
                             <li role="presentation">
-                                <a href="#signup" aria-controls="signup" role="tab" data-toggle="tab">
+                                <a href="#signUp" aria-controls="signUp" role="tab" data-toggle="tab">
                                     <i class="fa fa-envelope"></i> Sign Up
                                 </a>
                             </li>
@@ -145,8 +99,16 @@
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div role="tabpanel" class="tab-pane fade in active" id="signin">
+                            <div role="tabpanel" class="tab-pane fade in active" id="signIn">
                                 <form role="form" style="padding-top:12pt;">
+                                    <p class="text-left"><i class="fa fa-arrow-right"></i> With your <b>credentials</b> from...</p>
+                                    <a type="button" th:href="@{/auth/google}" class="btn btn-block btn-social btn-google-login">
+                                        <i class="fa fa-google"></i> Google</a>
+                                    <a type="button" th:href="@{/auth/amazon}" class="btn btn-block btn-social btn-amazon disabled">
+                                        <i class="fa fa-amazon"></i> Amazon</a>
+                                    <a type="button" th:href="@{/auth/paypal}" class="btn btn-block btn-social btn-paypal disabled">
+                                        <i class="fa fa-paypal"></i> Paypal</a>
+                                    <p class="text-left" style="padding-top:12pt;"><i class="fa fa-arrow-right"></i> <b>OR</b> your ABIMS credentials...</p>
                                     <div class="form-group">
                                         <input type="text" name="name" id="name" class="form-control input-sm" placeholder="Login Name"/>
                                     </div>
@@ -155,37 +117,17 @@
                                     </div>
                                     <a type="button" class="btn btn-success btn-block"><i class="fa fa-sign-in"></i> Sign In</a>
                                 </form>
-                                <hr/>
-                                <p class="text-center">
-                                    <i class="fa fa-long-arrow-right"></i> or sign in with <i class="fa fa-long-arrow-left"></i>
-                                </p>
-                                <a type="button" class="btn btn-block btn-social btn-google-plus"><i class="fa fa-google-plus"></i> Google</a>
-                                <a type="button" class="btn btn-block btn-social btn-linkedin"><i class="fa fa-linkedin"></i> LinkedIn</a>
-                                <a type="button" class="btn btn-block btn-social btn-facebook"><i class="fa fa-facebook"></i> Facebook</a>
-                                <a type="button" class="btn btn-block btn-social btn-twitter"><i class="fa fa-twitter"></i> Twitter</a>
                             </div>
-                            <div role="tabpanel" class="tab-pane fade" id="signup">
+                            <div role="tabpanel" class="tab-pane fade" id="signUp">
                                 <form role="form" style="padding-top:12pt;">
-                                    <div class="form-group">
-                                        <input type="text" name="first_name" id="first_name" class="form-control input-sm" placeholder="First Name"/>
-                                    </div>
-                                    <div class="form-group">
-                                        <input type="text" name="last_name" id="last_name" class="form-control input-sm" placeholder="Last Name"/>
-                                    </div>
+                                    <p class="text-left"><i class="fa fa-arrow-right"></i> With your <b>social</b> account at...</p>
+                                    <a type="button" th:href="@{/auth/linkedin}" class="btn btn-block btn-social btn-linkedin">
+                                        <i class="fa fa-linkedin"></i> LinkedIn</a>
+                                    <a type="button" th:href="@{/auth/facebook}" class="btn btn-block btn-social btn-facebook">
+                                        <i class="fa fa-facebook"></i> Facebook</a>
+                                    <p class="text-left" style="padding-top:12pt;"><i class="fa fa-arrow-right"></i> <b>OR</b> with your email...</p>
                                     <div class="form-group">
                                         <input type="email" name="email" id="email" class="form-control input-sm" placeholder="Email Address"/>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-xs-6 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="password" name="password" id="password" class="form-control input-sm" placeholder="Password"/>
-                                            </div>
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6">
-                                            <div class="form-group">
-                                                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control input-sm" placeholder="Confirm Password"/>
-                                            </div>
-                                        </div>
                                     </div>
                                     <a type="button" class="btn btn-block btn-success"><i class="fa fa-envelope"></i> Sign Up</a>
                                 </form>
@@ -202,9 +144,7 @@
 <!-- JQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <!-- Bootstrap -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-<!-- AngularJS -->
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.14/angular.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </body>
 </html>

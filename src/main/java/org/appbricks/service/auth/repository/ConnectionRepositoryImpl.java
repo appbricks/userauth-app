@@ -15,33 +15,33 @@ import java.util.*;
 /**
  * Implements Spring Social's ConnectionRepository interface 
  * for managing the persistence of a user's connections via
- * the Mongo SocialConnectionRepository.
+ * the Mongo socialConnectionRepository.
  */
 public class ConnectionRepositoryImpl
     implements ConnectionRepository {
 
     private final String userId;
 
-    private final SocialConnectionRepository SocialConnectionRepository;
+    private final SocialConnectionRepository socialConnectionRepository;
 
     private final SocialAuthenticationServiceLocator socialAuthenticationServiceLocator;
 
     private final TextEncryptor textEncryptor;
 
     public ConnectionRepositoryImpl( String userId, 
-        SocialConnectionRepository SocialConnectionRepository,
+        SocialConnectionRepository socialConnectionRepository,
         SocialAuthenticationServiceLocator socialAuthenticationServiceLocator, 
         TextEncryptor textEncryptor ) {
         
         this.userId = userId;
-        this.SocialConnectionRepository = SocialConnectionRepository;
+        this.socialConnectionRepository = socialConnectionRepository;
         this.socialAuthenticationServiceLocator = socialAuthenticationServiceLocator;
         this.textEncryptor = textEncryptor;
     }
 
     public MultiValueMap<String, Connection<?>> findAllConnections() {
         
-        List<SocialConnection> SocialConnectionList = this.SocialConnectionRepository.findByUserId(userId);
+        List<SocialConnection> socialConnectionList = this.socialConnectionRepository.findByUserId(userId);
 
         MultiValueMap<String, Connection<?>> connections = new LinkedMultiValueMap<String, Connection<?>>();
         Set<String> registeredProviderIds = socialAuthenticationServiceLocator.registeredProviderIds();
@@ -50,13 +50,13 @@ public class ConnectionRepositoryImpl
             connections.put(registeredProviderId, Collections.<Connection<?>> emptyList());
         }
         
-        for (SocialConnection SocialConnection : SocialConnectionList) {
+        for (SocialConnection socialConnection : socialConnectionList) {
             
-            String providerId = SocialConnection.getProviderId();
+            String providerId = socialConnection.getProviderId();
             if (connections.get(providerId).size() == 0) {
                 connections.put(providerId, new LinkedList<Connection<?>>());
             }
-            connections.add(providerId, buildConnection(SocialConnection));
+            connections.add(providerId, buildConnection(socialConnection));
         }
         
         return connections;
@@ -66,7 +66,7 @@ public class ConnectionRepositoryImpl
         
         List<Connection<?>> resultList = new LinkedList<Connection<?>>();
         
-        List<SocialConnection> SocialConnectionList = this.SocialConnectionRepository
+        List<SocialConnection> SocialConnectionList = this.socialConnectionRepository
             .findByUserIdAndProviderId(userId, providerId);
 
         for (SocialConnection SocialConnection : SocialConnectionList) {
@@ -97,7 +97,7 @@ public class ConnectionRepositoryImpl
             String providerId = entry.getKey();
             
             List<String> providerUserIds = entry.getValue();
-            List<SocialConnection> SocialConnections = this.SocialConnectionRepository
+            List<SocialConnection> socialConnections = this.socialConnectionRepository
                 .findByProviderIdAndProviderUserIdIn(providerId, providerUserIds);
 
             List<Connection<?>> connections = new ArrayList<Connection<?>>(providerUserIds.size());
@@ -106,11 +106,11 @@ public class ConnectionRepositoryImpl
             }
             connectionsForUsers.put(providerId, connections);
 
-            for (SocialConnection SocialConnection : SocialConnections) {
+            for (SocialConnection socialConnection : socialConnections) {
                 
-                String providerUserId = SocialConnection.getProviderUserId();
+                String providerUserId = socialConnection.getProviderUserId();
                 int connectionIndex = providerUserIds.indexOf(providerUserId);
-                connections.set(connectionIndex, buildConnection(SocialConnection));
+                connections.set(connectionIndex, buildConnection(socialConnection));
             }
 
         }
@@ -119,9 +119,9 @@ public class ConnectionRepositoryImpl
 
     public Connection<?> getConnection(ConnectionKey connectionKey) {
         
-        SocialConnection SocialConnection = this.SocialConnectionRepository
+        SocialConnection SocialConnection = this.socialConnectionRepository
             .findByUserIdAndProviderIdAndProviderUserId(
-                    userId, connectionKey.getProviderId(), connectionKey.getProviderUserId());
+                userId, connectionKey.getProviderId(), connectionKey.getProviderUserId());
 
         if (SocialConnection != null) {
             return buildConnection(SocialConnection);
@@ -162,9 +162,9 @@ public class ConnectionRepositoryImpl
         if ( socialAuthenticationService.getConnectionCardinality() == SocialAuthenticationService.ConnectionCardinality.ONE_TO_ONE ||
             socialAuthenticationService.getConnectionCardinality() == SocialAuthenticationService.ConnectionCardinality.ONE_TO_MANY) {
             
-            List<SocialConnection> storedConnections = this.SocialConnectionRepository
+            List<SocialConnection> storedConnections = this.socialConnectionRepository
                 .findByProviderIdAndProviderUserId(
-                        connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
+                    connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
 
             if (storedConnections.size() > 0){
                 // not allow one providerId/providerUserId connect to multiple userId
@@ -172,7 +172,7 @@ public class ConnectionRepositoryImpl
             }
         }
 
-        SocialConnection socialConnection = this.SocialConnectionRepository
+        SocialConnection socialConnection = this.socialConnectionRepository
             .findByUserIdAndProviderIdAndProviderUserId(
                 userId, connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
 
@@ -193,7 +193,7 @@ public class ConnectionRepositoryImpl
                     encrypt(data.getRefreshToken()),
                     data.getExpireTime() );
 
-            this.SocialConnectionRepository.save(socialConnection);
+            this.socialConnectionRepository.save(socialConnection);
             
         } else {
             throw new DuplicateConnectionException(connection.getKey());
@@ -203,7 +203,7 @@ public class ConnectionRepositoryImpl
     public void updateConnection(Connection<?> connection) {
         
         ConnectionData data = connection.createData();
-        SocialConnection SocialConnection = this.SocialConnectionRepository
+        SocialConnection SocialConnection = this.socialConnectionRepository
             .findByUserIdAndProviderIdAndProviderUserId(
                     userId, connection.getKey().getProviderId(), connection.getKey().getProviderUserId());
 
@@ -216,27 +216,27 @@ public class ConnectionRepositoryImpl
             SocialConnection.setSecret(encrypt(data.getSecret()));
             SocialConnection.setRefreshToken(encrypt(data.getRefreshToken()));
             SocialConnection.setExpireTime(data.getExpireTime());
-            this.SocialConnectionRepository.save(SocialConnection);
+            this.socialConnectionRepository.save(SocialConnection);
         }
     }
 
     public void removeConnections(String providerId) {
         
-        List<SocialConnection> SocialConnectionList = this.SocialConnectionRepository
+        List<SocialConnection> SocialConnectionList = this.socialConnectionRepository
             .findByUserIdAndProviderId(userId, providerId);
 
         for (SocialConnection SocialConnection : SocialConnectionList) {
-            this.SocialConnectionRepository.delete(SocialConnection);
+            this.socialConnectionRepository.delete(SocialConnection);
         }
     }
 
     public void removeConnection(ConnectionKey connectionKey) {
         
-        SocialConnection SocialConnection = this.SocialConnectionRepository
+        SocialConnection SocialConnection = this.socialConnectionRepository
             .findByUserIdAndProviderIdAndProviderUserId(
                     userId, connectionKey.getProviderId(), connectionKey.getProviderUserId());
 
-        this.SocialConnectionRepository.delete(SocialConnection);
+        this.socialConnectionRepository.delete(SocialConnection);
     }
 
     private Sort sortByProviderId() {
@@ -270,7 +270,7 @@ public class ConnectionRepositoryImpl
 
     private Connection<?> findPrimaryConnection(String providerId) {
         
-        List<SocialConnection> SocialConnectionList = this.SocialConnectionRepository
+        List<SocialConnection> SocialConnectionList = this.socialConnectionRepository
             .findByUserIdAndProviderId(userId, providerId);
 
         return buildConnection(SocialConnectionList.get(0));

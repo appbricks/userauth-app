@@ -3,6 +3,7 @@ package org.appbricks.service.auth.config;
 import org.appbricks.service.auth.service.UserLoginService;
 import org.appbricks.model.user.User;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -19,7 +20,8 @@ import javax.inject.Inject;
  */
 @Configuration
 @EnableWebMvcSecurity
-public class SecurityContext
+@Order(1)
+public class SecurityConfig
     extends WebSecurityConfigurerAdapter {
 
     @Inject

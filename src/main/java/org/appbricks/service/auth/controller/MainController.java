@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MainController {
 
     @RequestMapping(value="/", method=RequestMethod.GET)
-    public String greeting(@RequestParam(value="name", defaultValue="World") String name, Model model) {
+    public String main() {
 
         return "main";
     }
